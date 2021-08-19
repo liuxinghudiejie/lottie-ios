@@ -141,7 +141,7 @@ class LayerModel: Codable {
     self.startTime = try container.decode(Double.self, forKey: .startTime)
     self.transform = try container.decode(Transform.self, forKey: .transform)
     self.parent = try container.decodeIfPresent(Int.self, forKey: .parent)
-    self.blendMode = try container.decodeIfPresent(BlendMode.self, forKey: .blendMode) ?? .normal
+    self.blendMode = (try? container.decodeIfPresent(BlendMode.self, forKey: .blendMode)) ?? .normal
     self.masks = try container.decodeIfPresent([Mask].self, forKey: .masks)
     self.timeStretch = try container.decodeIfPresent(Double.self, forKey: .timeStretch) ?? 1
     self.matte = try container.decodeIfPresent(MatteType.self, forKey: .matte)
