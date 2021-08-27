@@ -131,6 +131,14 @@ final class AnimationContainer: CALayer {
       if let textLayer = layer as? TextCompositionLayer {
         textLayers.append(textLayer)
       }
+        
+        // 解决layer嵌套的问题
+    if let preLayer = layer as? PreCompositionLayer {
+        let preLayerResult = separaterLayer(preLayer: preLayer)
+        imageLayers.append(contentsOf: preLayerResult.imageLayers)
+        textLayers.append(contentsOf: preLayerResult.textLayers)
+    }
+        
       if let matte = mattedLayer {
         /// The previous layer requires this layer to be its matte
         matte.matteLayer = layer
@@ -153,6 +161,53 @@ final class AnimationContainer: CALayer {
     layerFontProvider.reloadTexts()
     setNeedsDisplay()
   }
+    
+    private func separaterLayer(preLayer: PreCompositionLayer) -> (imageLayers: [ImageCompositionLayer], textLayers: [TextCompositionLayer]) {
+        
+        var tempImageLayers = [ImageCompositionLayer]()
+        var tempTextLayers = [TextCompositionLayer]()
+
+        let tempSubLayers: [CompositionLayer] = preLayer.childKeypaths.compactMap { $0 as? CompositionLayer }
+        
+        tempSubLayers.map { item in
+            if let imageLayer = item as? ImageCompositionLayer {
+               tempImageLayers.append(imageLayer)
+           } else if let textLayer = item as? TextCompositionLayer {
+               tempTextLayers.append(textLayer)
+           } else if let preLayer = item as? PreCompositionLayer {
+                let result = separaterLayer(preLayer: preLayer)
+                tempImageLayers += result.imageLayers
+                tempTextLayers += result.textLayers
+           }
+        }
+        
+        return (imageLayers: tempImageLayers, textLayers: tempTextLayers)
+    }
+    
+    private func separaterLayers(layers: [CompositionLayer]) -> (imageLayers: [ImageCompositionLayer], textLayers: [TextCompositionLayer]) {
+        
+        guard let layer = layers.first else { return (imageLayers: [], textLayers: []) }
+        
+        var tempImageLayers = [ImageCompositionLayer]()
+        var tempTextLayers = [TextCompositionLayer]()
+        
+         if let imageLayer = layer as? ImageCompositionLayer {
+            tempImageLayers.append(imageLayer)
+        } else if let textLayer = layer as? TextCompositionLayer {
+            tempTextLayers.append(textLayer)
+        } else if let preLayer = layer as? PreCompositionLayer {
+            let subLayers = preLayer.childKeypaths.compactMap { $0 as? CompositionLayer }
+            let result = separaterLayers(layers: subLayers)
+            tempImageLayers += result.imageLayers
+            tempTextLayers += result.textLayers
+        } else {
+            let newLayers = Array(layers.dropFirst())
+            let result = separaterLayers(layers: newLayers)
+            tempImageLayers += result.imageLayers
+            tempTextLayers += result.textLayers
+        }
+        return (imageLayers: tempImageLayers, textLayers: tempTextLayers)
+    }
   
   /// For CAAnimation Use
   public override init(layer: Any) {
