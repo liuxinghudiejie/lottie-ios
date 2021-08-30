@@ -35,7 +35,7 @@ final class SolidCompositionLayer: CompositionLayer {
     fatalError("init(coder:) has not been implemented")
   }
   
-  override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool) {
+  override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool, changeText: Bool) {
     guard let colorProperty = colorProperty else { return }
     colorProperty.update(frame: frame)
     solidShape.fillColor = colorProperty.value.cgColorValue

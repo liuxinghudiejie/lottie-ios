@@ -80,7 +80,7 @@ final class PreCompositionLayer: CompositionLayer {
     fatalError("init(coder:) has not been implemented")
   }
   
-  override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool) {
+  override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool, changeText: Bool) {
     let localFrame: CGFloat
     if let remappingNode = remappingNode {
       remappingNode.update(frame: frame)
@@ -88,7 +88,7 @@ final class PreCompositionLayer: CompositionLayer {
     } else {
       localFrame = (frame - startFrame) / timeStretch
     }
-    animationLayers.forEach( { $0.displayWithFrame(frame: localFrame, forceUpdates: forceUpdates) })
+    animationLayers.forEach( { $0.displayWithFrame(frame: localFrame, forceUpdates: forceUpdates, changeText: changeText) })
   }
   
   override var keypathProperties: [String : AnyNodeProperty] {

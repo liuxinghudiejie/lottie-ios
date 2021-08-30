@@ -410,6 +410,9 @@ final public class AnimationView: LottieView {
     animationLayer?.forceDisplayUpdate()
   }
   
+    public func reloadTexts() {
+        animationLayer?.reloadTexts()
+    }
   // MARK: - Public (Dynamic Properties)
   
   /**

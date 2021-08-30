@@ -39,7 +39,7 @@ final class ShapeCompositionLayer: CompositionLayer {
     super.init(layer: layer)
   }
   
-  override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool) {
+  override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool, changeText: Bool) {
     rootNode?.updateTree(frame, forceUpdates: forceUpdates)
     renderContainer?.markRenderUpdates(forFrame: frame)
   }

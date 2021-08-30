@@ -110,12 +110,12 @@ class CompositionLayer: CALayer, KeypathSearchable {
     fatalError("init(coder:) has not been implemented")
   }
   
-  final func displayWithFrame(frame: CGFloat, forceUpdates: Bool) {
+    final func displayWithFrame(frame: CGFloat, forceUpdates: Bool, changeText: Bool) {
     transformNode.updateTree(frame, forceUpdates: forceUpdates)
     let layerVisible = frame.isInRangeOrEqual(inFrame, outFrame)
     /// Only update contents if current time is within the layers time bounds.
     if layerVisible {
-      displayContentsWithFrame(frame: frame, forceUpdates: forceUpdates)
+        displayContentsWithFrame(frame: frame, forceUpdates: forceUpdates, changeText: changeText)
       maskLayer?.updateWithFrame(frame: frame, forceUpdates: forceUpdates)
     }
     contentsLayer.transform = transformNode.globalTransform
@@ -124,7 +124,7 @@ class CompositionLayer: CALayer, KeypathSearchable {
     layerDelegate?.frameUpdated(frame: frame)
   }
   
-  func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool) {
+  func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool, changeText: Bool) {
     /// To be overridden by subclass
   }
   

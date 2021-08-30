@@ -89,14 +89,14 @@ final class TextCompositionLayer: CompositionLayer {
     super.init(layer: layer)
   }
   
-  override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool) {
+    override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool, changeText: Bool) {
     guard let textDocument = textDocument else { return }
     
     textLayer.contentsScale = self.renderScale
     
     let documentUpdate = textDocument.hasUpdate(frame: frame)
     let animatorUpdate = rootNode?.updateContents(frame, forceLocalUpdate: forceUpdates) ?? false
-    guard documentUpdate == true || animatorUpdate == true else { return }
+    guard documentUpdate == true || animatorUpdate == true || changeText == true else { return }
     
     rootNode?.rebuildOutputs(frame: frame)
     

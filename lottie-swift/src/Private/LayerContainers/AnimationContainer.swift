@@ -42,8 +42,12 @@ final class AnimationContainer: CALayer {
   
   /// Forces the view to update its drawing.
   func forceDisplayUpdate() {
-    animationLayers.forEach( { $0.displayWithFrame(frame: currentFrame, forceUpdates: true) })
+    animationLayers.forEach( { $0.displayWithFrame(frame: currentFrame, forceUpdates: true, changeText: false) })
   }
+    
+    func reloadTexts() {
+        animationLayers.forEach( { $0.displayWithFrame(frame: currentFrame, forceUpdates: true, changeText: true) })
+    }
   
   func logHierarchyKeypaths() {
     print("Lottie: Logging Animation Keypaths")
@@ -56,7 +60,7 @@ final class AnimationContainer: CALayer {
         for property in foundProperties {
           property.setProvider(provider: valueProvider)
         }
-        layer.displayWithFrame(frame: presentation()?.currentFrame ?? currentFrame, forceUpdates: true)
+        layer.displayWithFrame(frame: presentation()?.currentFrame ?? currentFrame, forceUpdates: true, changeText: false)
       }
     }
   }
@@ -259,7 +263,7 @@ final class AnimationContainer: CALayer {
     if respectAnimationFrameRate {
       newFrame = floor(newFrame)
     }
-    animationLayers.forEach( { $0.displayWithFrame(frame: newFrame, forceUpdates: false) })
+    animationLayers.forEach( { $0.displayWithFrame(frame: newFrame, forceUpdates: false, changeText: false) })
   }
   
 }
