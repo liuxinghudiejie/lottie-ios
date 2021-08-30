@@ -47,7 +47,13 @@ final class TextCompositionLayer: CompositionLayer {
   let textDocument: KeyframeInterpolator<TextDocument>?
   
   let textLayer: TextLayer = TextLayer()
-  var textProvider: AnimationTextProvider
+  var textProvider: AnimationTextProvider{
+    didSet {
+        forceLocalUpdate = true
+    }
+ }
+  var forceLocalUpdate: Bool = true
+    
   var fontProvider: AnimationFontProvider
   
   init(textLayer: TextLayerModel, textProvider: AnimationTextProvider, fontProvider: AnimationFontProvider) {
@@ -96,8 +102,8 @@ final class TextCompositionLayer: CompositionLayer {
     
     let documentUpdate = textDocument.hasUpdate(frame: frame)
     let animatorUpdate = rootNode?.updateContents(frame, forceLocalUpdate: forceUpdates) ?? false
-    guard documentUpdate == true || animatorUpdate == true else { return }
-    
+    guard documentUpdate == true || animatorUpdate == true || forceLocalUpdate == true else { return }
+    forceLocalUpdate = false
     rootNode?.rebuildOutputs(frame: frame)
     
     // Get Text Attributes
