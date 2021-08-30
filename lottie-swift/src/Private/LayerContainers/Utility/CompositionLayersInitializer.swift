@@ -41,7 +41,7 @@ extension Array where Element == LayerModel {
         let precompContainer = PreCompositionLayer(precomp: precompLayer,
                                                    asset: precompAsset,
                                                    layerImageProvider: layerImageProvider,
-                                                   textProvider: textProvider, layerTextProvider: layerTextProvider,
+                                                   layerTextProvider: layerTextProvider, textProvider: textProvider,
                                                    fontProvider: fontProvider,
                                                    assetLibrary: assetLibrary,
                                                    frameRate: frameRate)
